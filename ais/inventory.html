@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ambulance Inventory Management System</title>
+  <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+  <h1>Ambulance Inventory</h1>
+
+<table id="ambulanceInventory">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Unit</th>
+      <th>Quantity</th>
+      <th>Reorder Point</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Oxygen Tank</td>
+      <td>Emergency Oxygen Unit</td>
+      <td>Boxes</td>
+      <td>5</td>
+      <td>2</td>
+    </tr>
+    <td>FirstAid Kit</td>
+      <td>Medical EssentialsMedical Essentials</td>
+      <td>Boxes</td>
+      <td>10</td>
+      <td>5</td>
+    </tr>
+    <td>Splints</td>
+      <td>Immobilizing device</td>
+      <td>Boxes</td>
+      <td>20</td>
+      <td>15</td>
+    </tr>
+    <td>Stretcher</td>
+      <td>Portable medical bed</td>
+      <td>Boxes</td>
+      <td>20</td>
+      <td>10</td>
+    </tr>
+    <td>Defibrillator</td>
+      <td>Cardiac restart tool</td>
+      <td>Boxes</td>
+      <td>20</td>
+      <td>15</td>
+    </tr>
+    <td>Suction Unit</td>
+      <td>Portable fluid extractor</td>
+      <td>Boxes</td>
+      <td>20</td>
+      <td>10</td>
+    </tr>
+    <td>Bandage</td>
+      <td>Wound dressing</td>
+      <td>Boxes</td>
+      <td>20</td>
+      <td>10</td>
+    </tr>
+    <!-- Other rows omitted for brevity -->
+  </tbody>
+</table>
+
+
+  <h2>Inventory</h2>
+
+  <div class="inventory-container">
+    <form id="inventoryForm">
+      <table class="inventory-table">
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+        </tr>
+        <tr>
+          <td>Oxygen Tank</td>
+          <td><input id="oxygenTankQty" type="number" min="-10" value="0" onchange="updateAmbulanceInventory('Oxygen Tank', this.value)"></td>
+        </tr>
+        <tr>
+          <td>FirstAid Kit</td>
+          <td><input id="FirstAid Kit" type="number" min="-10" value="0" onchange="updateAmbulanceInventory('FirstAid Kit', this.value)"></td>
+        </tr>
+        <tr>
+          <td>Splints</td>
+          <td><input id="Splints" type="number" min="-10" value="0" onchange="updateAmbulanceInventory('Splints', this.value)"></td>
+        </tr>
+        <tr>
+          <td>Stretcher</td>
+          <td><input id="Stretcher" type="number" min="-10" value="0" onchange="updateAmbulanceInventory('Stretcher', this.value)"></td>
+        </tr>
+        <tr>
+          <td>Defibrillator</td>
+          <td><input id="Defibrillator" type="number" min="-10" value="0" onchange="updateAmbulanceInventory('Defibrillator', this.value)"></td>
+        </tr>
+      
+        <!-- Other rows omitted for brevity -->
+      </table>
+      <button type="button" onclick="addNewItem()">Add New Item</button>
+      <button type="button" onclick="adjustQuantity('+')">+</button>
+      <button type="button" onclick="adjustQuantity('-')">-</button>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+<script>
+  function addNewItem() {
+    var table = document.querySelector('.inventory-table');
+    var itemName = prompt("Enter item name:");
+    if (itemName) {
+      var quantity = prompt("Enter quantity:");
+      var reorderPoint = prompt("Enter reorder point:");
+      if (!isNaN(parseInt(quantity)) && !isNaN(parseInt(reorderPoint))) {
+        var newRow = table.insertRow(-1);
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+        cell1.textContent = itemName;
+        cell2.innerHTML = '<input id="' + itemName.replace(/\s+/g, '') + 'Qty" type="number" min="0" value="0" onchange="updateAmbulanceInventory(\'' + itemName + '\', this.value)">';
+
+        // Update ambulance inventory table
+        var ambulanceTable = document.querySelector('#ambulanceInventory tbody');
+        var ambulanceRow = null;
+        for (var i = 0; i < ambulanceTable.rows.length; i++) {
+          if (ambulanceTable.rows[i].cells[0].textContent === itemName) {
+            ambulanceRow = ambulanceTable.rows[i];
+            break;
+          }
+        }
+        if (ambulanceRow) {
+          var currentQuantity = parseInt(ambulanceRow.cells[3].textContent);
+          var currentReorderPoint = parseInt(ambulanceRow.cells[4].textContent);
+          ambulanceRow.cells[3].textContent = currentQuantity + parseInt(quantity);
+          ambulanceRow.cells[4].textContent = currentReorderPoint + parseInt(reorderPoint);
+        } else {
+          var ambulanceNewRow = ambulanceTable.insertRow(-1);
+          var ambulanceCell1 = ambulanceNewRow.insertCell(0);
+          var ambulanceCell2 = ambulanceNewRow.insertCell(1);
+          var ambulanceCell3 = ambulanceNewRow.insertCell(2);
+          var ambulanceCell4 = ambulanceNewRow.insertCell(3);
+          var ambulanceCell5 = ambulanceNewRow.insertCell(4);
+          ambulanceCell1.textContent = itemName;
+          ambulanceCell2.textContent = "Description"; // Add description here
+          ambulanceCell3.textContent = "Unit"; // Add unit here
+          ambulanceCell4.textContent = quantity; // Initialize quantity
+          ambulanceCell5.textContent = reorderPoint; // Initialize reorder point
+        }
+
+        // Add event listener to the newly added input field
+        var newItemInput = document.getElementById(itemName.replace(/\s+/g, '') + 'Qty');
+        newItemInput.addEventListener('change', function() {
+          updateAmbulanceInventory(itemName, this.value);
+        });
+      } else {
+        alert("Please enter valid quantity and reorder point.");
+      }
+    }
+  }
+
+  function updateAmbulanceInventory(itemName, quantity) {
+    var ambulanceTable = document.querySelector('#ambulanceInventory');
+    for (var i = 1; i < ambulanceTable.rows.length; i++) {
+      if (ambulanceTable.rows[i].cells[0].textContent === itemName) {
+        var currentQuantity = parseInt(ambulanceTable.rows[i].cells[3].textContent);
+        var newQuantity = currentQuantity + parseInt(quantity);
+        if (newQuantity >= 0) {
+          ambulanceTable.rows[i].cells[3].textContent = newQuantity;
+          // Update quantity input in Inventory part
+          var qtyInput = document.getElementById(itemName.replace(/\s+/g, '') + 'Qty');
+          qtyInput.value = newQuantity;
+        } else {
+          alert("Ambulance Inventory quantity cannot go below 0.");
+        }
+        break;
+      }
+    }
+  }
+  
+  function adjustQuantity(operation) {
+    var itemName = prompt("Enter the item name:");
+    if (itemName) {
+      var quantity = prompt("Enter the quantity to " + (operation === '+' ? "add" : "subtract") + ":");
+      if (!isNaN(parseInt(quantity))) {
+        quantity = (operation === '+') ? quantity : -quantity;
+        var ambulanceTable = document.querySelector('#ambulanceInventory');
+        for (var i = 1; i < ambulanceTable.rows.length; i++) {
+          if (ambulanceTable.rows[i].cells[0].textContent === itemName) {
+            var currentQuantity = parseInt(ambulanceTable.rows[i].cells[3].textContent);
+            var newQuantity = currentQuantity + parseInt(quantity);
+            if (newQuantity >= 0) {
+              ambulanceTable.rows[i].cells[3].textContent = newQuantity;
+              // Update quantity input in Inventory part
+              var qtyInput = document.getElementById(itemName.replace(/\s+/g, '') + 'Qty');
+              qtyInput.value = newQuantity;
+            } else {
+              alert("Ambulance Inventory quantity cannot go below 0.");
+            }
+            break;
+          }
+        }
+      } else {
+        alert("Please enter a valid quantity.");
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

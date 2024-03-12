@@ -1,0 +1,71 @@
+/* Base styles */
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f8f9fa; /* Very light gray */
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #3498db; /* Darker blue */
+}
+
+h2 {
+  color: #2ecc71; /* Emerald green */
+}
+
+/* Table styles */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #e0ebef; /* Light gray */
+  color: #333; /* Dark gray */
+}
+
+/* Inventory container styling */
+.inventory-container {
+  background-color: #eaecee; /* Light gray with a hint of blue */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  border: 1px solid #ccc; /* Box border */
+}
+
+/* Dynamic inventory table styling */
+.inventory-table {
+  margin-top: 10px; /* Space between tables */
+}
+
+/* Input field styling */
+input[type="number"] {
+  width: 50px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+/* Link styling */
+a {
+  text-decoration: none;
+  color: #2ecc71; /* Emerald green */
+  font-weight: bold;
+}
+
+a:hover {
+  color: #3498db; /* Darker blue */
+}
